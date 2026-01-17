@@ -20,6 +20,7 @@ transition s2 {s1,s3}
 transition s3 {s0,s1,s3}
 ```
 This represents the following model:
+
 ![](./resources/sample-model.png)
 
 Then, if p = E[~c U (b ^ ~t)], Sat(p) = {s1}. So, M |/= p
