@@ -52,7 +52,30 @@ impl Lexer {
     fn lex(&mut self) -> Vec<Token> {
         let mut tokens: Vec<Token> = Vec::new();
         while self.cursor < self.src_len {
-            let c = self.chop();
+            let mut c = self.chop();
+            if c.is_alphabetic() {
+                let mut tok = String::new();
+                tok.push(c);
+                c = self.chop();
+                while c.is_alphabetic() || c.is_digit(10) {
+                    tok.push(c);
+                    c = self.chop();
+                }
+
+                let kind: TokenKind;
+                if is_keyword(&tok) {
+                    kind = TokenKind::Keyword;
+                } else {
+                    kind = TokenKind::Symbol;
+                }
+
+                tokens.push(Token {
+                    kind: kind,
+                    value: tok,
+                    line: self.line,
+                });
+            }
+
             if c == '{' {
                 tokens.push(Token {
                     kind: TokenKind::OpenCurly,
@@ -77,4 +100,8 @@ impl Lexer {
         }
         tokens
     }
+}
+
+fn is_keyword(s: &String) -> bool {
+    s == "let" || s == "label" || s == "transition"
 }
