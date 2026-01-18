@@ -1,0 +1,12 @@
+let S {s0,s1,s2,s3}
+let I {s0}
+
+label s0 {c}
+label s1 {b}
+label s2 {t,b}
+label s3 nil        # Empty set
+
+transition s0 {s1,s3}
+transition s1 {s2}
+transition s2 {s1,s3}
+transition s3 {s0,s1,s3}
