@@ -103,5 +103,5 @@ impl Lexer {
 }
 
 fn is_keyword(s: &String) -> bool {
-    s == "let" || s == "label" || s == "transition"
+    s == "let" || s == "label" || s == "transition" || s == "nil"
 }
