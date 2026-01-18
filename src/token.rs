@@ -6,6 +6,7 @@ pub enum Kind {
     CloseCurly,
     Comma,
     Comment,
+    Nil,
 }
 
 pub struct Token {

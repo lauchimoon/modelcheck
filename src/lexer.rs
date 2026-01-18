@@ -34,6 +34,8 @@ impl Lexer {
                 let kind: Kind;
                 if is_keyword(&tok) {
                     kind = Kind::Keyword;
+                } else if tok == "nil" {
+                    kind = Kind::Nil;
                 } else {
                     kind = Kind::Symbol;
                 }
@@ -102,5 +104,5 @@ impl Lexer {
 }
 
 fn is_keyword(s: &String) -> bool {
-    s == "let" || s == "label" || s == "transition" || s == "nil"
+    s == "let" || s == "label" || s == "transition"
 }
