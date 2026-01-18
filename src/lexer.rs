@@ -45,6 +45,27 @@ impl Lexer {
                 });
             }
 
+            if c == '#' {
+                tokens.push(Token {
+                    kind: Kind::Comment,
+                    value: "#".to_string(),
+                    line: self.line,
+                });
+
+                c = self.chop();
+                let mut comment_text = String::new();
+                while c != '\n' {
+                    comment_text.push(c);
+                    c = self.chop();
+                }
+
+                tokens.push(Token {
+                    kind: Kind::Comment,
+                    value: comment_text,
+                    line: self.line,
+                });
+            }
+
             if c == '{' {
                 tokens.push(Token {
                     kind: Kind::OpenCurly,

@@ -5,6 +5,7 @@ pub enum Kind {
     OpenCurly,
     CloseCurly,
     Comma,
+    Comment,
 }
 
 pub struct Token {
