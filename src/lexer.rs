@@ -10,7 +10,7 @@ pub struct Lexer {
 
 impl Lexer {
     pub fn new(src: String) -> Self {
-        return Lexer{
+        Lexer {
             src: src.chars().collect(),
             src_len: src.len(),
             cursor: 0,
