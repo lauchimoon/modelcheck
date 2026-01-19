@@ -65,7 +65,7 @@ impl Parser {
     // <set> ::= {<element>} | nil
     fn set(&mut self) {
         if !self.matches(&[Kind::Nil, Kind::OpenCurly]) {
-            syntax_error("nil or '{{'", self.current());
+            syntax_error("nil or '{'", self.current());
         }
         println!("<set>");
 
@@ -84,7 +84,7 @@ impl Parser {
         println!("<element>{}</element>", self.previous().value);
 
         if self.cursor >= self.tokens.len() {
-            syntax_error("'}}'", self.current());
+            syntax_error("'}'", self.current());
         }
 
         if self.current().kind != Kind::CloseCurly {
