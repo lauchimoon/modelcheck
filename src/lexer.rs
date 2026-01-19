@@ -23,6 +23,7 @@ impl Lexer {
         while self.cursor < self.src_len {
             let mut c = self.chop();
             if c.is_alphabetic() {
+                let cursor = self.cursor;
                 let mut tok = String::new();
                 tok.push(c);
                 c = self.chop();
@@ -44,14 +45,17 @@ impl Lexer {
                     kind: kind,
                     value: tok,
                     line: self.line,
+                    loc: cursor,
                 });
             }
 
             if c == '#' {
+                let cursor = self.cursor;
                 tokens.push(Token {
                     kind: Kind::Comment,
                     value: "#".to_string(),
                     line: self.line,
+                    loc: self.cursor,
                 });
 
                 c = self.chop();
@@ -65,6 +69,7 @@ impl Lexer {
                     kind: Kind::Comment,
                     value: comment_text,
                     line: self.line,
+                    loc: cursor,
                 });
             }
 
@@ -73,18 +78,21 @@ impl Lexer {
                     kind: Kind::OpenCurly,
                     value: "{".to_string(),
                     line: self.line,
+                    loc: self.cursor,
                 });
             } else if c == '}' {
                 tokens.push(Token {
                     kind: Kind::CloseCurly,
                     value: "}".to_string(),
                     line: self.line,
+                    loc: self.cursor,
                 });
             } else if c == ',' {
                 tokens.push(Token {
                     kind: Kind::Comma,
                     value: ",".to_string(),
                     line: self.line,
+                    loc: self.cursor,
                 });
             } else if c == '\n' {
                 self.line += 1;
