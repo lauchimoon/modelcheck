@@ -1,23 +1,16 @@
 mod token;
 mod lexer;
 mod parser;
+mod interpreter;
 
-use std::collections::HashMap;
 use lexer::Lexer;
 use parser::Parser;
+use interpreter::Interpreter;
+
 use std::fs;
 use std::env;
 use std::path::Path;
 use std::ffi::OsStr;
-
-#[derive(Debug, Default)]
-struct CTLState {
-    labels: Vec<String>,
-    transitions: Vec<String>,
-}
-
-type InitState = HashMap<String, Vec<String>>;
-type Model = HashMap<String, CTLState>;
 
 fn main() {
     let filepath = parse_args();
@@ -28,47 +21,16 @@ fn main() {
     let mut parser = Parser::new(tokens);
     let stmts = parser.parse();
 
-    let mut init: InitState = HashMap::new();
-    let mut model: Model = HashMap::new();
-
     // TODO: what happens if "let S" and "let I" are not present in the program?
-    eval(&stmts, &mut init, &mut model);
+    let mut interpreter = Interpreter::new(stmts);
+    interpreter.interpret();
+
+    let (init, model) = (interpreter.init, interpreter.model);
     println!("S: {:#?}\nI: {:#?}", init["S"], init["I"]);
 
     for (ident, st) in model {
         println!("{}: Labels: {:#?}\nTransitions: {:#?}", ident, st.labels, st.transitions);
     }
-}
-
-fn eval(stmts: &Vec<parser::Statement>, init: &mut InitState, model: &mut Model) {
-    for stmt in stmts {
-        if stmt.keyword == "let" {
-            if !expect(stmt.identifier.clone(), &["S".to_string(), "I".to_string()]) {
-                panic!("eval error: expected 'S' or 'I' after let, got {}.", stmt.identifier);
-            }
-            init.entry(stmt.identifier.clone()).or_insert(stmt.set.clone());
-        } else if stmt.keyword == "label" {
-            let state = CTLState {
-                labels: stmt.set.clone(),
-                transitions: Vec::new(),
-            };
-            model.entry(stmt.identifier.clone()).or_insert(state);
-        } else if stmt.keyword == "transition" {
-            let state = model.entry(stmt.identifier.clone()).or_default();
-            for st in &stmt.set {
-                state.transitions.push((*st).clone());
-            }
-        }
-    }
-}
-
-fn expect(target: String, candidates: &[String]) -> bool {
-    for candidate in candidates {
-        if *candidate == target {
-            return true;
-        }
-    }
-    false
 }
 
 fn parse_args() -> String {
