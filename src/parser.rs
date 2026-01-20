@@ -6,6 +6,12 @@ pub struct Parser {
     cursor: usize,
 }
 
+pub struct Statement {
+    pub keyword: String,
+    pub identifier: String,
+    pub set: Vec<String>,
+}
+
 impl Parser {
     pub fn new(tokens: Vec<Token>) -> Self {
         Parser {
@@ -14,10 +20,13 @@ impl Parser {
         }
     }
 
-    pub fn parse(&mut self) {
+    pub fn parse(&mut self) -> Vec<Statement> {
+        let mut stmts: Vec<Statement> = Vec::new();
         while self.cursor < self.tokens.len() {
-            self.statement();
+            stmts.push(self.statement());
         }
+
+        stmts
     }
 
     fn previous(&self) -> &Token {
@@ -48,35 +57,34 @@ impl Parser {
     }
 
     // <statement> ::= <keyword> <symbol> <set>;
-    fn statement(&mut self) {
-        println!("<statement>");
+    fn statement(&mut self) -> Statement {
         if !self.matches(&[Kind::Keyword]) {
             syntax_error("keyword", self.current());
         }
-        println!("<keyword>{}</keyword>", self.previous().value);
+        let kw = self.previous().value.clone();
 
         if !self.matches(&[Kind::Symbol]) {
             syntax_error("symbol", self.current());
         }
-        println!("<symbol>{}</symbol>", self.previous().value);
+        let ident = self.previous().value.clone();
 
-        self.set();
+        let elements = self.set();
 
         if !self.matches(&[Kind::Semicolon]) {
             syntax_error("';'", self.current());
         }
-        println!("</statement>");
+        Statement {keyword: kw, identifier: ident, set: elements}
     }
 
     // <set> ::= {<element>} | nil
-    fn set(&mut self) {
+    fn set(&mut self) -> Vec<String> {
+        let mut elements: Vec<String> = Vec::new();
         if !self.matches(&[Kind::Nil, Kind::OpenCurly]) {
             syntax_error("nil or '{'", self.current());
         }
-        println!("<set>");
 
         if self.previous().kind != Kind::Nil {
-            self.element();
+            self.element(&mut elements);
 
             // After parsing elements, check if '}' is present
             if !self.matches(&[Kind::CloseCurly]) {
@@ -84,22 +92,23 @@ impl Parser {
             }
         }
 
-        println!("</set>");
+        elements
     }
 
     // <element> ::= <symbol> | ,<element>
-    fn element(&mut self) {
+    fn element(&mut self, elems_vec: &mut Vec<String>) {
         if !self.matches(&[Kind::Symbol]) {
             syntax_error("Symbol", self.current());
         }
-        println!("<element>{}</element>", self.previous().value);
+
+        (*elems_vec).push(self.previous().value.clone());
 
         if self.current().kind != Kind::CloseCurly {
             if !self.matches(&[Kind::Comma]) {
                 syntax_error("','", self.current());
             }
 
-            self.element();
+            self.element(elems_vec);
         }
     }
 }

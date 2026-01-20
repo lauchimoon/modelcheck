@@ -12,10 +12,15 @@ use std::ffi::OsStr;
 fn main() {
     let filepath = parse_args();
     let src = fs::read_to_string(filepath).expect("Error opening file");
+
     let mut lexer = Lexer::new(src);
     let tokens = lexer.lex();
     let mut parser = Parser::new(tokens);
-    parser.parse();
+    let stmts = parser.parse();
+
+    for stmt in stmts {
+        println!("{} {} {:#?}", stmt.keyword, stmt.identifier, stmt.set);
+    }
 }
 
 fn parse_args() -> String {
