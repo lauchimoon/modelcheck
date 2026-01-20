@@ -15,7 +15,9 @@ impl Parser {
     }
 
     pub fn parse(&mut self) {
-        self.statement();
+        while self.cursor < self.tokens.len() {
+            self.statement();
+        }
     }
 
     fn previous(&self) -> &Token {
@@ -45,7 +47,7 @@ impl Parser {
         false
     }
 
-    // <statement> ::= <keyword> <symbol> <set>
+    // <statement> ::= <keyword> <symbol> <set>;
     fn statement(&mut self) {
         println!("<statement>");
         if !self.matches(&[Kind::Keyword]) {
@@ -59,6 +61,10 @@ impl Parser {
         println!("<symbol>{}</symbol>", self.previous().value);
 
         self.set();
+
+        if !self.matches(&[Kind::Semicolon]) {
+            syntax_error("';'", self.current());
+        }
         println!("</statement>");
     }
 
@@ -69,8 +75,13 @@ impl Parser {
         }
         println!("<set>");
 
-        if self.current().kind != Kind::Nil {
+        if self.previous().kind != Kind::Nil {
             self.element();
+
+            // After parsing elements, check if '}' is present
+            if !self.matches(&[Kind::CloseCurly]) {
+                syntax_error("'}'", self.current());
+            }
         }
 
         println!("</set>");
@@ -82,10 +93,6 @@ impl Parser {
             syntax_error("Symbol", self.current());
         }
         println!("<element>{}</element>", self.previous().value);
-
-        if self.cursor >= self.tokens.len() {
-            syntax_error("'}'", self.current());
-        }
 
         if self.current().kind != Kind::CloseCurly {
             if !self.matches(&[Kind::Comma]) {

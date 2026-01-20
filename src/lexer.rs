@@ -94,6 +94,13 @@ impl Lexer {
                     line: self.line,
                     loc: self.cursor,
                 });
+            } else if c == ';' {
+                tokens.push(Token {
+                    kind: Kind::Semicolon,
+                    value: ";".to_string(),
+                    line: self.line,
+                    loc: self.cursor,
+                });
             } else if c == '\n' {
                 self.line += 1;
             }
