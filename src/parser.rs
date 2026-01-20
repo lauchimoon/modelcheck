@@ -12,6 +12,7 @@ pub struct Statement {
     pub set: Vec<String>,
 }
 
+// TODO: implement parsing comments
 impl Parser {
     pub fn new(tokens: Vec<Token>) -> Self {
         Parser {
