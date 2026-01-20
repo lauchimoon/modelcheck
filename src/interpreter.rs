@@ -7,13 +7,13 @@ pub struct CTLState {
     pub transitions: Vec<String>,
 }
 
-type InitState = HashMap<String, Vec<String>>;
-type Model = HashMap<String, CTLState>;
+pub type InitState = HashMap<String, Vec<String>>;
+pub type States = HashMap<String, CTLState>;
 
 pub struct Interpreter {
     stmts: Vec<parser::Statement>,
     pub init: InitState,
-    pub model: Model,
+    pub states: States,
 }
 
 impl Interpreter {
@@ -21,7 +21,7 @@ impl Interpreter {
         Interpreter {
             stmts: statements,
             init: HashMap::new(),
-            model: HashMap::new(),
+            states: HashMap::new(),
         }
     }
 
@@ -37,9 +37,9 @@ impl Interpreter {
                     labels: stmt.set.clone(),
                     transitions: Vec::new(),
                 };
-                self.model.entry(stmt.identifier.clone()).or_insert(state);
+                self.states.entry(stmt.identifier.clone()).or_insert(state);
             } else if stmt.keyword == "transition" {
-                let state = self.model.entry(stmt.identifier.clone()).or_default();
+                let state = self.states.entry(stmt.identifier.clone()).or_default();
                 for st in &stmt.set {
                     state.transitions.push((*st).clone());
                 }
