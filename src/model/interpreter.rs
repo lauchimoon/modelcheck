@@ -1,6 +1,6 @@
-use crate::parser;
-use crate::model::Model;
-use crate::model::CTLState;
+use crate::model::parser;
+use crate::model::ctlmodel::Model;
+use crate::model::ctlmodel::CTLState;
 
 pub struct Interpreter {
     stmts: Vec<parser::Statement>,

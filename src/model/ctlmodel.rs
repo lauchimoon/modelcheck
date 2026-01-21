@@ -1,9 +1,9 @@
 use std::fs;
 use std::collections::HashMap;
 
-use crate::lexer::Lexer;
-use crate::parser::Parser;
-use crate::interpreter::Interpreter;
+use crate::model::lexer::Lexer;
+use crate::model::parser::Parser;
+use crate::model::interpreter::Interpreter;
 
 #[derive(Default, Clone)]
 pub struct CTLState {

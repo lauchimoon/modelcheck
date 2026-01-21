@@ -1,10 +1,6 @@
-mod token;
-mod lexer;
-mod parser;
-mod interpreter;
 mod model;
 
-use model::Model;
+use crate::model::ctlmodel::Model;
 
 use std::env;
 use std::path::Path;

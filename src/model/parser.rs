@@ -1,5 +1,5 @@
-use crate::token::Token;
-use crate::token::Kind;
+use crate::model::token::Token;
+use crate::model::token::Kind;
 
 pub struct Parser {
     tokens: Vec<Token>,
