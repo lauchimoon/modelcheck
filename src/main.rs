@@ -2,7 +2,9 @@ mod token;
 mod lexer;
 mod parser;
 mod interpreter;
-mod ctlmodel;
+mod model;
+
+use model::Model;
 
 use std::env;
 use std::path::Path;
@@ -10,10 +12,10 @@ use std::ffi::OsStr;
 
 fn main() {
     let filepath = parse_args();
-    let (init, states) = ctlmodel::new(filepath);
+    let model = Model::new(filepath);
 
-    println!("S: {:#?}\nI: {:#?}", init["S"], init["I"]);
-    for (ident, state) in states {
+    println!("S: {:#?}\nI: {:#?}", model.states, model.init_states);
+    for (ident, state) in model.state_info {
         println!("{}: Labels: {:#?}\nTransitions: {:#?}", ident, state.labels, state.transitions);
     }
 }

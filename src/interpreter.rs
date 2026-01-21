@@ -1,52 +1,48 @@
-use std::collections::HashMap;
 use crate::parser;
-
-#[derive(Default)]
-pub struct CTLState {
-    pub labels: Vec<String>,
-    pub transitions: Vec<String>,
-}
-
-pub type InitState = HashMap<String, Vec<String>>;
-pub type States = HashMap<String, CTLState>;
+use crate::model::Model;
+use crate::model::CTLState;
 
 pub struct Interpreter {
     stmts: Vec<parser::Statement>,
-    pub init: InitState,
-    pub states: States,
+    pub model: Model,
 }
 
 impl Interpreter {
     pub fn new(statements: Vec<parser::Statement>) -> Self {
         Interpreter {
             stmts: statements,
-            init: HashMap::new(),
-            states: HashMap::new(),
+            model: Model::empty(),
         }
     }
 
-    pub fn interpret(&mut self) {
+    pub fn interpret(&mut self) -> Model {
         for stmt in &self.stmts {
             if stmt.keyword == "let" {
                 if !expect(stmt.identifier.clone(), &["S".to_string(), "I".to_string()]) {
                     panic!("eval error: expected 'S' or 'I' after let, got {}.", stmt.identifier);
                 }
-                self.init.entry(stmt.identifier.clone()).or_insert(stmt.set.clone());
+
+                if stmt.identifier == "S" {
+                    self.model.states = stmt.set.clone();
+                } else if stmt.identifier == "I" {
+                    self.model.init_states = stmt.set.clone();
+                }
             } else if stmt.keyword == "label" {
                 let state = CTLState {
                     labels: stmt.set.clone(),
                     transitions: Vec::new(),
                 };
-                self.states.entry(stmt.identifier.clone()).or_insert(state);
+                self.model.state_info.entry(stmt.identifier.clone()).or_insert(state);
             } else if stmt.keyword == "transition" {
-                let state = self.states.entry(stmt.identifier.clone()).or_default();
+                let state = self.model.state_info.entry(stmt.identifier.clone()).or_default();
                 for st in &stmt.set {
                     state.transitions.push((*st).clone());
                 }
             }
         }
-    }
 
+        self.model.clone()
+    }
 }
 
 fn expect(target: String, candidates: &[String]) -> bool {
