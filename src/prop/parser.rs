@@ -100,7 +100,7 @@ impl Parser {
         match modifier {
             Kind::Next => {
                 self.consume();
-                let formula = self.parse();
+                let formula = self.parse_unary();
                 Formula::EX(Box::new(formula))
             }
             Kind::OpenBracket => {
@@ -122,12 +122,12 @@ impl Parser {
             }
             Kind::Future => {
                 self.consume();
-                let formula = self.parse();
+                let formula = self.parse_unary();
                 Formula::EF(Box::new(formula))
             }
             Kind::Global => {
                 self.consume();
-                let formula = self.parse();
+                let formula = self.parse_unary();
                 Formula::EG(Box::new(formula))
             }
             _ => todo!()
@@ -138,7 +138,7 @@ impl Parser {
         match modifier {
             Kind::Next => {
                 self.consume();
-                let formula = self.parse();
+                let formula = self.parse_unary();
                 Formula::AX(Box::new(formula))
             }
             Kind::OpenBracket => {
@@ -160,12 +160,12 @@ impl Parser {
             }
             Kind::Future => {
                 self.consume();
-                let formula = self.parse();
+                let formula = self.parse_unary();
                 Formula::AF(Box::new(formula))
             }
             Kind::Global => {
                 self.consume();
-                let formula = self.parse();
+                let formula = self.parse_unary();
                 Formula::AG(Box::new(formula))
             }
             _ => todo!()
