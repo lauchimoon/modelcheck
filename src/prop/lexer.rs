@@ -116,6 +116,11 @@ impl Lexer {
                     kind: Kind::CloseParen,
                     value: ")".to_string(),
                 });
+            } else if c == '!' {
+                tokens.push(Token {
+                    kind: Kind::Not,
+                    value: "!".to_string(),
+                });
             }
         }
         tokens
