@@ -75,7 +75,6 @@ impl Parser {
             Kind::OpenParen => {
                 self.consume();
                 let formula = self.parse();
-                self.consume();
                 let current = self.current().clone();
                 if current.kind != Kind::CloseParen {
                     panic!("expected closing parenthesis, found {:#?}", current.kind);
@@ -118,6 +117,7 @@ impl Parser {
                 if current.kind != Kind::CloseBracket {
                     panic!("expected closing bracket, found {:#?}", current.kind);
                 }
+                self.consume();
                 Formula::EU(Box::new(l), Box::new(r))
             }
             Kind::Future => {
@@ -155,6 +155,7 @@ impl Parser {
                 if current.kind != Kind::CloseBracket {
                     panic!("expected closing bracket, found {:#?}", current.kind);
                 }
+                self.consume();
                 Formula::AU(Box::new(l), Box::new(r))
             }
             Kind::Future => {

@@ -16,17 +16,11 @@ fn main() {
         println!("{}: Labels: {:#?}\nTransitions: {:#?}", ident, state.labels, state.transitions);
     }
 
-    run_prop("p".to_string());
-    run_prop("p -> q".to_string());
-    run_prop("p v q".to_string());
-    run_prop("p ^ q".to_string());
-    run_prop("!p ^ q".to_string());
-    run_prop("p ^ q ^ r".to_string());
-    run_prop("!(p ^ (q -> r))".to_string());
-    run_prop("EX(p ^ q)".to_string());
-    run_prop("A[p U q]".to_string());
     run_prop("EF(p ^ E[q U r])".to_string());
-    run_prop("AG(~(p ^ q))".to_string());
+    run_prop("E[~c U (b ^ ~t)]".to_string());
+    run_prop("p -> AGp".to_string());
+    run_prop("A[0 U p] -> p".to_string());
+    run_prop("EGp -> AFp".to_string());
 }
 
 fn load_model() -> Model {
