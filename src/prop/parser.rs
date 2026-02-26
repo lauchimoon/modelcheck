@@ -21,7 +21,7 @@ impl Parser {
 
     fn parse_implies(&mut self) -> Formula {
         let mut l = self.parse_or();
-        if self.current().kind == Kind::Implies {
+        while self.current().kind == Kind::Implies {
             self.consume();
             let r = self.parse_implies();
             l = Formula::Implies(Box::new(l), Box::new(r));
@@ -32,7 +32,7 @@ impl Parser {
 
     fn parse_or(&mut self) -> Formula {
         let mut l = self.parse_and();
-        if self.current().kind == Kind::Or {
+        while self.current().kind == Kind::Or {
             self.consume();
             let r = self.parse_and();
             l = Formula::Or(Box::new(l), Box::new(r));
@@ -43,7 +43,7 @@ impl Parser {
 
     fn parse_and(&mut self) -> Formula {
         let mut l = self.parse_unary();
-        if self.current().kind == Kind::And {
+        while self.current().kind == Kind::And {
             self.consume();
             let r = self.parse_unary();
             l = Formula::And(Box::new(l), Box::new(r));
