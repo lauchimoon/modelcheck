@@ -88,6 +88,11 @@ impl Parser {
                 let modifier = self.current().clone();
                 self.parse_exists_op(modifier.kind)
             }
+            Kind::ForAll => {
+                self.consume();
+                let modifier = self.current().clone();
+                self.parse_forall_op(modifier.kind)
+            }
             _ => todo!()
         }
     }
@@ -102,8 +107,8 @@ impl Parser {
             Kind::OpenBracket => {
                 self.consume();
                 let l = self.parse();
-                // Only operator to use [] is until
                 let mut current = self.current().clone();
+                // Only operator to use [] is until
                 if current.kind != Kind::Until {
                     panic!("expected U, found {:#?}", current.kind);
                 }
@@ -124,6 +129,43 @@ impl Parser {
                 self.consume();
                 let formula = self.parse();
                 Formula::EG(Box::new(formula))
+            }
+            _ => todo!()
+        }
+    }
+
+    fn parse_forall_op(&mut self, modifier: Kind) -> Formula {
+        match modifier {
+            Kind::Next => {
+                self.consume();
+                let formula = self.parse();
+                Formula::AX(Box::new(formula))
+            }
+            Kind::OpenBracket => {
+                self.consume();
+                let l = self.parse();
+                let mut current = self.current().clone();
+                // Only operator to use [] is until
+                if current.kind != Kind::Until {
+                    panic!("expected U, found {:#?}", current.kind);
+                }
+                self.consume();
+                let r = self.parse();
+                current = self.current().clone();
+                if current.kind != Kind::CloseBracket {
+                    panic!("expected closing bracket, found {:#?}", current.kind);
+                }
+                Formula::AU(Box::new(l), Box::new(r))
+            }
+            Kind::Future => {
+                self.consume();
+                let formula = self.parse();
+                Formula::AF(Box::new(formula))
+            }
+            Kind::Global => {
+                self.consume();
+                let formula = self.parse();
+                Formula::AG(Box::new(formula))
             }
             _ => todo!()
         }
