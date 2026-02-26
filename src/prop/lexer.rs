@@ -61,7 +61,7 @@ impl Lexer {
                     kind: Kind::Global,
                     value: "G".to_string(),
                 });
-            } else if c.is_alphabetic() {
+            } else if c.is_alphabetic() && !self.reserved(c) {
                 let mut val = String::new();
                 val.push(c);
                 c = self.chop();
@@ -135,5 +135,11 @@ impl Lexer {
             return ' ';
         }
         self.src[self.cursor]
+    }
+
+    fn reserved(&mut self, c: char) -> bool {
+        c == 'V' || c == 'E' || c == 'A' ||
+            c == 'U' || c == 'X' || c == 'F' ||
+            c == 'G'
     }
 }
