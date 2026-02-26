@@ -22,6 +22,7 @@ fn main() {
     run_prop("p ^ q".to_string());
     run_prop("!p ^ q".to_string());
     run_prop("p ^ q ^ r".to_string());
+    run_prop("!(p ^ (q -> r))".to_string());
 }
 
 fn load_model() -> Model {

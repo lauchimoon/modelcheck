@@ -72,6 +72,16 @@ impl Parser {
                 let l = self.parse_unary();
                 Formula::Not(Box::new(l))
             }
+            Kind::OpenParen => {
+                self.consume();
+                let formula = self.parse();
+                let current = self.current().clone();
+                if current.kind != Kind::CloseParen {
+                    panic!("expected closing parenthesis, found {:#?}", current.kind);
+                }
+                self.consume();
+                formula
+            }
             _ => todo!()
         }
     }
