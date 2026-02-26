@@ -3,6 +3,7 @@ mod prop;
 
 use crate::model::ctlmodel::Model;
 use crate::prop::lexer::Lexer;
+use crate::prop::parser::Parser;
 
 use std::env;
 use std::path::Path;
@@ -15,10 +16,10 @@ fn main() {
         println!("{}: Labels: {:#?}\nTransitions: {:#?}", ident, state.labels, state.transitions);
     }
 
-    run_prop("E[~c U (b ^ ~t)]".to_string());
-    run_prop("p -> AGp".to_string());
-    run_prop("A[0 U p] -> p".to_string());
-    run_prop("EGp -> AFp".to_string());
+    run_prop("p".to_string());
+    run_prop("p -> q".to_string());
+    run_prop("p V q".to_string());
+    run_prop("p ^ q".to_string());
 }
 
 fn load_model() -> Model {
@@ -29,10 +30,8 @@ fn load_model() -> Model {
 fn run_prop(prop: String) {
     println!("{}", prop);
     let mut lexer = Lexer::new(prop);
-    let tokens = lexer.lex();
-    for tok in &tokens {
-        println!("{:#?}: {}", tok.kind, tok.value);
-    }
+    let mut parser = Parser::new(lexer.lex());
+    println!("{:#?}", parser.parse());
     println!("-------");
 }
 

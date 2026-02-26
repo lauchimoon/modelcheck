@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Kind {
     False,
     True,
@@ -19,6 +19,7 @@ pub enum Kind {
     CloseParen,
 }
 
+#[derive(Clone)]
 pub struct Token {
     pub kind: Kind,
     pub value: String,
