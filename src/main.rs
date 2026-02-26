@@ -18,11 +18,15 @@ fn main() {
 
     run_prop("p".to_string());
     run_prop("p -> q".to_string());
-    run_prop("p V q".to_string());
+    run_prop("p v q".to_string());
     run_prop("p ^ q".to_string());
     run_prop("!p ^ q".to_string());
     run_prop("p ^ q ^ r".to_string());
     run_prop("!(p ^ (q -> r))".to_string());
+    run_prop("EX(p ^ q)".to_string());
+    run_prop("E[p U q]".to_string());
+    run_prop("EF(p ^ E[q U r])".to_string());
+    run_prop("EG(~(p ^ q))".to_string());
 }
 
 fn load_model() -> Model {

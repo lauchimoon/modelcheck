@@ -75,12 +75,55 @@ impl Parser {
             Kind::OpenParen => {
                 self.consume();
                 let formula = self.parse();
+                self.consume();
                 let current = self.current().clone();
                 if current.kind != Kind::CloseParen {
                     panic!("expected closing parenthesis, found {:#?}", current.kind);
                 }
                 self.consume();
                 formula
+            }
+            Kind::Exists => {
+                self.consume();
+                let modifier = self.current().clone();
+                self.parse_exists_op(modifier.kind)
+            }
+            _ => todo!()
+        }
+    }
+
+    fn parse_exists_op(&mut self, modifier: Kind) -> Formula {
+        match modifier {
+            Kind::Next => {
+                self.consume();
+                let formula = self.parse();
+                Formula::EX(Box::new(formula))
+            }
+            Kind::OpenBracket => {
+                self.consume();
+                let l = self.parse();
+                // Only operator to use [] is until
+                let mut current = self.current().clone();
+                if current.kind != Kind::Until {
+                    panic!("expected U, found {:#?}", current.kind);
+                }
+                self.consume();
+                let r = self.parse();
+                current = self.current().clone();
+                if current.kind != Kind::CloseBracket {
+                    panic!("expected closing bracket, found {:#?}", current.kind);
+                }
+                Formula::EU(Box::new(l), Box::new(r))
+            }
+            Kind::Future => {
+                self.consume();
+                let formula = self.parse();
+                Formula::EF(Box::new(formula))
+            }
+            Kind::Global => {
+                self.consume();
+                let formula = self.parse();
+                Formula::EG(Box::new(formula))
             }
             _ => todo!()
         }
