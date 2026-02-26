@@ -86,7 +86,7 @@ impl Lexer {
                     kind: Kind::And,
                     value: "and".to_string(),
                 });
-            } else if c == 'V' {
+            } else if c == 'V' || c == 'v' {
                 tokens.push(Token {
                     kind: Kind::Or,
                     value: "or".to_string(),
@@ -145,6 +145,6 @@ impl Lexer {
     fn reserved(&mut self, c: char) -> bool {
         c == 'V' || c == 'E' || c == 'A' ||
             c == 'U' || c == 'X' || c == 'F' ||
-            c == 'G'
+            c == 'G' || c == 'v'
     }
 }
