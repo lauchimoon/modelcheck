@@ -67,6 +67,11 @@ impl Parser {
                 self.consume();
                 Formula::True
             }
+            Kind::Not => {
+                self.consume();
+                let l = self.parse_unary();
+                Formula::Not(Box::new(l))
+            }
             _ => todo!()
         }
     }

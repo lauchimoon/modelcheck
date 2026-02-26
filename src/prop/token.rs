@@ -19,7 +19,7 @@ pub enum Kind {
     CloseParen,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Token {
     pub kind: Kind,
     pub value: String,
