@@ -1,9 +1,12 @@
 mod model;
 mod prop;
+mod sat;
 
 use crate::model::ctlmodel::Model;
 use crate::prop::lexer::Lexer;
 use crate::prop::parser::Parser;
+use crate::prop::formula::Formula;
+use crate::sat::sat::Sat;
 
 use std::env;
 use std::path::Path;
@@ -12,15 +15,15 @@ use std::ffi::OsStr;
 fn main() {
     let model = load_model();
     println!("S: {:#?}\nI: {:#?}", model.states, model.init_states);
-    for (ident, state) in model.state_info {
+    for (ident, state) in &model.state_info {
         println!("{}: Labels: {:#?}\nTransitions: {:#?}", ident, state.labels, state.transitions);
     }
 
-    run_prop("EF(p ^ E[q U r])".to_string());
-    run_prop("E[~c U (b ^ ~t)]".to_string());
-    run_prop("p -> AGp".to_string());
-    run_prop("A[0 U p] -> p".to_string());
-    run_prop("EGp -> AFp".to_string());
+    //let formula = parse_formula("E[~c U (b ^ ~t)]".to_string());
+    let formula = parse_formula("b ^ ~t".to_string());
+    for state in Sat(&model, &formula) {
+        println!("{}", state);
+    }
 }
 
 fn load_model() -> Model {
@@ -28,12 +31,8 @@ fn load_model() -> Model {
     Model::new(filepath)
 }
 
-fn run_prop(prop: String) {
-    println!("{}", prop);
-    let mut lexer = Lexer::new(prop);
-    let mut parser = Parser::new(lexer.lex());
-    println!("{:#?}", parser.parse());
-    println!("-------");
+fn parse_formula(formula_string: String) -> Formula {
+    Parser::new(Lexer::new(formula_string).lex()).parse()
 }
 
 fn parse_args() -> String {

@@ -5,7 +5,7 @@ use crate::model::lexer::Lexer;
 use crate::model::parser::Parser;
 use crate::model::interpreter::Interpreter;
 
-#[derive(Default, Clone)]
+#[derive(Default, Eq, Hash, PartialEq, Debug, Clone)]
 pub struct CTLState {
     pub labels: Vec<String>,
     pub transitions: Vec<String>,
