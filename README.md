@@ -23,4 +23,4 @@ This represents the following model:
 
 ![](./resources/sample-model.png)
 
-Then, if p = E[~c U (b ^ ~t)], Sat(p) = {s1}. So, M |/= p
+Then, if p = E[~c U (b ^ ~t)], Sat(p) = {s1, s2, s3}. So, M |/= p
