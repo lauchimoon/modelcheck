@@ -12,6 +12,10 @@ use crate::model::ctlmodel::Model;
 // Sat(AXphi)      = pre_forall(Sat(phi))
 // Sat(E[p U q])   = exists_until(p, q)
 // Sat(A[p U q])   = forall_until(p, q)
+// Sat(EFphi)      = exists_future(phi)
+// Sat(AFphi)      = forall_future(phi)
+// Sat(EGphi)      = Sat(~AF(~phi)) = S - forall_future(~phi)
+// Sat(AGphi)      = Sat(~EF(~phi)) = S - exists_future(~phi)
 pub fn sat(model: &Model, formula: &Formula) -> HashSet<String> {
     match formula {
         Formula::False => {
@@ -58,6 +62,22 @@ pub fn sat(model: &Model, formula: &Formula) -> HashSet<String> {
         }
         Formula::AU(form1, form2) => {
             forall_until(model, form1, form2)
+        }
+        Formula::EF(form) => {
+            exists_future(model, form)
+        }
+        Formula::AF(form) => {
+            forall_future(model, form)
+        }
+        Formula::EG(form) => {
+            let s: HashSet<String> = model.states.clone().into_iter().collect();
+            s.difference(&forall_future(model, &Formula::Not(form.clone())))
+                .cloned().collect()
+        }
+        Formula::AG(form) => {
+            let s: HashSet<String> = model.states.clone().into_iter().collect();
+            s.difference(&exists_future(model, &Formula::Not(form.clone())))
+                .cloned().collect()
         }
         _ => todo!()
     }
@@ -127,4 +147,12 @@ fn forall_until(model: &Model, form1: &Formula, form2: &Formula) -> HashSet<Stri
         y_n = new_y;
     }
     y_n
+}
+
+fn exists_future(model: &Model, form: &Formula) -> HashSet<String> {
+    exists_until(model, &Formula::True, form)
+}
+
+fn forall_future(model: &Model, form: &Formula) -> HashSet<String> {
+    forall_until(model, &Formula::True, form)
 }
