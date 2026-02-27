@@ -6,7 +6,7 @@ use crate::model::ctlmodel::Model;
 use crate::prop::lexer::Lexer;
 use crate::prop::parser::Parser;
 use crate::prop::formula::Formula;
-use crate::sat::sat::Sat;
+use crate::sat::sat::sat;
 
 use std::env;
 use std::path::Path;
@@ -20,8 +20,8 @@ fn main() {
     }
 
     //let formula = parse_formula("E[~c U (b ^ ~t)]".to_string());
-    let formula = parse_formula("b ^ ~t".to_string());
-    for state in Sat(&model, &formula) {
+    let formula = parse_formula("AXb".to_string());
+    for state in sat(&model, &formula) {
         println!("{}", state);
     }
 }
