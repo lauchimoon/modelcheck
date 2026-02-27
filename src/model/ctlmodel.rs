@@ -1,9 +1,16 @@
-use std::fs;
-use std::collections::HashMap;
-
 use crate::model::lexer::Lexer;
 use crate::model::parser::Parser;
 use crate::model::interpreter::Interpreter;
+use crate::sat::sat::sat;
+
+use crate::prop::lexer::Lexer as PropLexer;
+use crate::prop::parser::Parser as PropParser;
+use crate::prop::formula::Formula;
+
+use std::fs;
+use std::collections::HashMap;
+use std::collections::HashSet;
+
 
 #[derive(Default, Eq, Hash, PartialEq, Debug, Clone)]
 pub struct CTLState {
@@ -40,5 +47,16 @@ impl Model {
         interpreter.interpret();
 
         interpreter.model
+    }
+
+    pub fn check(&self, formula: String) -> bool {
+        let form = self.parse_formula(formula);
+        let states = sat(self, &form);
+        let initial: HashSet<String> = self.init_states.clone().into_iter().collect();
+        initial.is_subset(&states)
+    }
+
+    fn parse_formula(&self, formula_string: String) -> Formula {
+        PropParser::new(PropLexer::new(formula_string).lex()).parse()
     }
 }
