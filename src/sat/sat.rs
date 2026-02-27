@@ -10,6 +10,8 @@ use crate::model::ctlmodel::Model;
 // Sat(phi -> psi) = Sat(~phi) \cup Sat(psi)
 // Sat(EXphi)      = pre_exists(Sat(phi))
 // Sat(AXphi)      = pre_forall(Sat(phi))
+// Sat(E[p U q])   = exists_until(p, q)
+// Sat(A[p U q])   = forall_until(p, q)
 pub fn sat(model: &Model, formula: &Formula) -> HashSet<String> {
     match formula {
         Formula::False => {
@@ -51,6 +53,12 @@ pub fn sat(model: &Model, formula: &Formula) -> HashSet<String> {
         Formula::AX(form) => {
             pre_forall(model, sat(model, form))
         }
+        Formula::EU(form1, form2) => {
+            exists_until(model, form1, form2)
+        }
+        Formula::AU(form1, form2) => {
+            forall_until(model, form1, form2)
+        }
         _ => todo!()
     }
 }
@@ -89,4 +97,34 @@ fn pre_forall(model: &Model, set: HashSet<String>) -> HashSet<String> {
         }
     }
     pre
+}
+
+fn exists_until(model: &Model, form1: &Formula, form2: &Formula) -> HashSet<String> {
+    let x = sat(model, form1);
+    let mut y_n = sat(model, form2);
+    loop {
+        let pre_y = pre_exists(model, y_n.clone());
+        let intersection: HashSet<String> = x.intersection(&pre_y).cloned().collect();
+        let new_y: HashSet<String> = y_n.union(&intersection).cloned().collect();
+        if new_y == y_n {
+            break;
+        }
+        y_n = new_y;
+    }
+    y_n
+}
+
+fn forall_until(model: &Model, form1: &Formula, form2: &Formula) -> HashSet<String> {
+    let x = sat(model, form1);
+    let mut y_n = sat(model, form2);
+    loop {
+        let pre_y = pre_forall(model, y_n.clone());
+        let intersection: HashSet<String> = x.intersection(&pre_y).cloned().collect();
+        let new_y: HashSet<String> = y_n.union(&intersection).cloned().collect();
+        if new_y == y_n {
+            break;
+        }
+        y_n = new_y;
+    }
+    y_n
 }

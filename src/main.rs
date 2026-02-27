@@ -19,8 +19,7 @@ fn main() {
         println!("{}: Labels: {:#?}\nTransitions: {:#?}", ident, state.labels, state.transitions);
     }
 
-    //let formula = parse_formula("E[~c U (b ^ ~t)]".to_string());
-    let formula = parse_formula("AXb".to_string());
+    let formula = parse_formula("E[~c U (b ^ ~t)]".to_string());
     for state in sat(&model, &formula) {
         println!("{}", state);
     }
