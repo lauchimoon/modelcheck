@@ -2,13 +2,9 @@ use crate::ctl::lexer::Lexer;
 use crate::ctl::parser::Parser;
 use crate::ctl::interpreter::Interpreter;
 use crate::ctl::state::State;
-use crate::sat::sat::sat;
-
-use crate::prop::lexer::Lexer as PropLexer;
-use crate::prop::parser::Parser as PropParser;
 use crate::prop::formula::Formula;
-
 use crate::util::set::print_set;
+use crate::sat::sat::sat;
 
 use std::fs;
 use std::collections::HashMap;
@@ -43,9 +39,8 @@ impl Model {
         interpreter.model
     }
 
-    pub fn check(&self, formula: &String) -> bool {
-        let form = self.parse_formula(formula);
-        let states = sat(self, &form);
+    pub fn check(&self, formula: &Formula) -> bool {
+        let states = sat(self, formula);
         print!("Sat({formula}) = ");
         print_set(&states);
 
@@ -53,7 +48,4 @@ impl Model {
         initial.is_subset(&states)
     }
 
-    fn parse_formula(&self, formula_string: &String) -> Formula {
-        PropParser::new(PropLexer::new(formula_string.clone()).lex()).parse()
-    }
 }
