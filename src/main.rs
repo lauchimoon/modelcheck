@@ -5,36 +5,27 @@ mod util;
 
 use crate::ctl::model::Model;
 use crate::prop::formula::Formula;
-use crate::util::set::print_set;
 
 use std::env;
 use std::path::Path;
 use std::ffi::OsStr;
 
 fn main() {
-    let (model, formula) = load_model_and_formula();
-    print!("S = ");
-    print_set(&model.states);
-    print!("I = ");
-    print_set(&model.init_states);
-    for (ident, state) in &model.state_info {
-        println!("{}:", ident);
-        print!("  Labels: ");
-        print_set(&state.labels);
-        print!("  Transitions: ");
-        print_set(&state.transitions);
+    let (model_path, formula_string) = parse_args();
+    let model = Model::from_file(model_path);
+    let formula = Formula::from_string(formula_string);
+
+    let verbose = true;
+    if verbose {
+        println!("{}", model);
     }
+
     let valid = model.check(&formula);
     if valid {
         println!("M |= {}", formula);
     } else {
         println!("M |/= {}", formula);
     }
-}
-
-fn load_model_and_formula() -> (Model, Formula) {
-    let (filepath, formula) = parse_args();
-    (Model::from_file(filepath), Formula::from_string(formula))
 }
 
 fn parse_args() -> (String, String) {

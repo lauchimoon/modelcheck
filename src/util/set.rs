@@ -1,20 +1,22 @@
-use std::fmt::Display;
+use std::fmt;
 
-pub fn print_set<I, T>(set: I)
-where I: IntoIterator<Item = T>,
+pub fn print_set<W, I, T>(f: &mut W, set: I) -> fmt::Result
+where W: fmt::Write,
+      I: IntoIterator<Item = T>,
       I::IntoIter:ExactSizeIterator,
-      T: Display,
+      T: fmt::Display,
 {
     let iter = set.into_iter();
     let length = iter.len();
 
-    print!("{{");
+    write!(f, "{{")?;
     for (i, x) in iter.enumerate() {
         if i + 1 >= length {
-            print!("{x}");
+            write!(f, "{x}")?;
         } else {
-            print!("{x}, ");
+            write!(f, "{x}, ")?;
         }
     }
-    println!("}}");
+    write!(f, "}}")?;
+    Ok(())
 }
