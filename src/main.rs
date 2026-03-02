@@ -33,7 +33,7 @@ fn main() {
 
 fn load_model_and_prop() -> (Model, String) {
     let (filepath, prop) = parse_args();
-    (Model::new(filepath), prop)
+    (Model::from_file(filepath), prop)
 }
 
 fn parse_args() -> (String, String) {

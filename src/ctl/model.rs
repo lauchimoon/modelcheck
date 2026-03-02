@@ -30,7 +30,7 @@ impl Model {
         }
     }
 
-    pub fn new(filepath: String) -> Self {
+    pub fn from_file(filepath: String) -> Self {
         let src = fs::read_to_string(filepath).expect("Error opening file");
 
         let mut lexer = Lexer::new(src);
