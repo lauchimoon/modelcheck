@@ -13,17 +13,17 @@ use std::ffi::OsStr;
 fn main() {
     let (model, prop) = load_model_and_prop();
     print!("S = ");
-    print_set(model.states.clone());
+    print_set(&model.states);
     print!("I = ");
-    print_set(model.init_states.clone());
+    print_set(&model.init_states);
     for (ident, state) in &model.state_info {
         println!("{}:", ident);
         print!("  Labels: ");
-        print_set(state.labels.clone());
+        print_set(&state.labels);
         print!("  Transitions: ");
-        print_set(state.transitions.clone());
+        print_set(&state.transitions);
     }
-    let valid = model.check(prop.clone());
+    let valid = model.check(&prop);
     if valid {
         println!("M |= {}", prop);
     } else {

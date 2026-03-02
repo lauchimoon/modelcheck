@@ -1,6 +1,9 @@
-pub fn print_set<I>(set: I)
-where I: IntoIterator<Item = String>,
+use std::fmt::Display;
+
+pub fn print_set<I, T>(set: I)
+where I: IntoIterator<Item = T>,
       I::IntoIter:ExactSizeIterator,
+      T: Display,
 {
     let iter = set.into_iter();
     let length = iter.len();

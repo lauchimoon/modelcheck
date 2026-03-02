@@ -85,19 +85,19 @@ impl Parser {
             Kind::Exists => {
                 self.consume();
                 let modifier = self.current().clone();
-                self.parse_exists_op(modifier.kind)
+                self.parse_exists_op(modifier)
             }
             Kind::ForAll => {
                 self.consume();
                 let modifier = self.current().clone();
-                self.parse_forall_op(modifier.kind)
+                self.parse_forall_op(modifier)
             }
-            _ => todo!()
+            _ => panic!("expected unary expression, found {}", token.value)
         }
     }
 
-    fn parse_exists_op(&mut self, modifier: Kind) -> Formula {
-        match modifier {
+    fn parse_exists_op(&mut self, modifier: Token) -> Formula {
+        match modifier.kind {
             Kind::Next => {
                 self.consume();
                 let formula = self.parse_unary();
@@ -130,12 +130,12 @@ impl Parser {
                 let formula = self.parse_unary();
                 Formula::EG(Box::new(formula))
             }
-            _ => todo!()
+            _ => panic!("unknown exists modifier '{}' found.", modifier.value)
         }
     }
 
-    fn parse_forall_op(&mut self, modifier: Kind) -> Formula {
-        match modifier {
+    fn parse_forall_op(&mut self, modifier: Token) -> Formula {
+        match modifier.kind {
             Kind::Next => {
                 self.consume();
                 let formula = self.parse_unary();
@@ -168,7 +168,7 @@ impl Parser {
                 let formula = self.parse_unary();
                 Formula::AG(Box::new(formula))
             }
-            _ => todo!()
+            _ => panic!("unknown for all modifier '{}' found.", modifier.value)
         }
     }
 

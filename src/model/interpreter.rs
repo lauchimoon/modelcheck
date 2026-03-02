@@ -18,7 +18,7 @@ impl Interpreter {
     pub fn interpret(&mut self) -> Model {
         for stmt in &self.stmts {
             if stmt.keyword == "let" {
-                if !expect(stmt.identifier.clone(), &["S".to_string(), "I".to_string()]) {
+                if !expect(&stmt.identifier, &["S".to_string(), "I".to_string()]) {
                     panic!("eval error: expected 'S' or 'I' after let, got {}.", stmt.identifier);
                 }
 
@@ -36,7 +36,7 @@ impl Interpreter {
             } else if stmt.keyword == "transition" {
                 let state = self.model.state_info.entry(stmt.identifier.clone()).or_default();
                 for st in &stmt.set {
-                    state.transitions.push((*st).clone());
+                    state.transitions.push(st.clone());
                 }
             }
         }
@@ -45,9 +45,9 @@ impl Interpreter {
     }
 }
 
-fn expect(target: String, candidates: &[String]) -> bool {
+fn expect(target: &String, candidates: &[String]) -> bool {
     for candidate in candidates {
-        if *candidate == target {
+        if candidate == target {
             return true;
         }
     }

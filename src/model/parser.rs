@@ -102,7 +102,7 @@ impl Parser {
             syntax_error("Symbol", self.current());
         }
 
-        (*elems_vec).push(self.previous().value.clone());
+        elems_vec.push(self.previous().value.clone());
 
         if self.current().kind != Kind::CloseCurly {
             if !self.matches(&[Kind::Comma]) {

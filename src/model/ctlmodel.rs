@@ -39,8 +39,7 @@ impl Model {
         let src = fs::read_to_string(filepath).expect("Error opening file");
 
         let mut lexer = Lexer::new(src);
-        let tokens = lexer.lex();
-        let mut parser = Parser::new(tokens);
+        let mut parser = Parser::new(lexer.lex());
         let stmts = parser.parse();
 
         // TODO: what happens if "let S" and "let I" are not present in the program?
@@ -49,11 +48,12 @@ impl Model {
         interpreter.model
     }
 
-    pub fn check(&self, formula: String) -> bool {
-        let form = self.parse_formula(&formula);
+    pub fn check(&self, formula: &String) -> bool {
+        let form = self.parse_formula(formula);
         let states = sat(self, &form);
         print!("Sat({formula}) = ");
-        print_set(states.clone());
+        print_set(&states);
+
         let initial: HashSet<String> = self.init_states.clone().into_iter().collect();
         initial.is_subset(&states)
     }
