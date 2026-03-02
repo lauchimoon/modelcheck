@@ -23,6 +23,8 @@ phi ::= 0 | 1 | p | ~phi | !phi | phi ^ phi | phi v phi | phi V phi |
          A[phi U phi] | E[phi U phi]
 ```
 So for example, a formula could look like `A[(c ^ t) U ~(E[c U c] -> 0)]`
+- `~phi` and `!phi` are equivalent. So `~(c ^ t) == `!(c ^ t)`
+- `phi v phi` and `phi V phi` are equivalent. So `c v t == `c V t`
 
 ## Example
 We define a model as follows
