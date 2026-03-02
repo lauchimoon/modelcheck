@@ -7,10 +7,11 @@ use crate::prop::lexer::Lexer as PropLexer;
 use crate::prop::parser::Parser as PropParser;
 use crate::prop::formula::Formula;
 
+use crate::util::set::print_set;
+
 use std::fs;
 use std::collections::HashMap;
 use std::collections::HashSet;
-
 
 #[derive(Default, Eq, Hash, PartialEq, Debug, Clone)]
 pub struct CTLState {
@@ -45,18 +46,19 @@ impl Model {
         // TODO: what happens if "let S" and "let I" are not present in the program?
         let mut interpreter = Interpreter::new(stmts);
         interpreter.interpret();
-
         interpreter.model
     }
 
     pub fn check(&self, formula: String) -> bool {
-        let form = self.parse_formula(formula);
+        let form = self.parse_formula(&formula);
         let states = sat(self, &form);
+        print!("Sat({formula}) = ");
+        print_set(states.clone());
         let initial: HashSet<String> = self.init_states.clone().into_iter().collect();
         initial.is_subset(&states)
     }
 
-    fn parse_formula(&self, formula_string: String) -> Formula {
-        PropParser::new(PropLexer::new(formula_string).lex()).parse()
+    fn parse_formula(&self, formula_string: &String) -> Formula {
+        PropParser::new(PropLexer::new(formula_string.clone()).lex()).parse()
     }
 }

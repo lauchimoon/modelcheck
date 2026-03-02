@@ -1,17 +1,27 @@
 mod model;
 mod prop;
 mod sat;
+mod util;
 
 use crate::model::ctlmodel::Model;
+use crate::util::set::print_set;
+
 use std::env;
 use std::path::Path;
 use std::ffi::OsStr;
 
 fn main() {
     let (model, prop) = load_model_and_prop();
-    println!("S: {:#?}\nI: {:#?}", model.states, model.init_states);
+    print!("S = ");
+    print_set(model.states.clone());
+    print!("I = ");
+    print_set(model.init_states.clone());
     for (ident, state) in &model.state_info {
-        println!("{}: Labels: {:#?}\nTransitions: {:#?}", ident, state.labels, state.transitions);
+        println!("{}:", ident);
+        print!("  Labels: ");
+        print_set(state.labels.clone());
+        print!("  Transitions: ");
+        print_set(state.transitions.clone());
     }
     let valid = model.check(prop.clone());
     if valid {
