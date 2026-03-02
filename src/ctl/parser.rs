@@ -98,6 +98,11 @@ impl Parser {
 
     // <element> ::= <symbol> | ,<element>
     fn element(&mut self, elems_vec: &mut Vec<String>) {
+        // No elements to parse
+        if self.current().kind == Kind::CloseCurly {
+            return;
+        }
+
         if !self.matches(&[Kind::Symbol]) {
             syntax_error("Symbol", self.current());
         }
