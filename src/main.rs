@@ -6,10 +6,6 @@ mod util;
 use crate::ctl::model::Model;
 use crate::prop::formula::Formula;
 
-use std::env;
-use std::path::Path;
-use std::ffi::OsStr;
-
 use clap::Parser;
 
 #[derive(Parser, Debug)]
