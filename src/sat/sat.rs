@@ -21,6 +21,9 @@ pub fn sat(model: &Model, formula: &Formula) -> HashSet<String> {
         Formula::False => {
             HashSet::new()
         }
+        Formula::True => {
+            model.states.clone().into_iter().collect()
+        }
         Formula::Var(ident) => {
             let mut states: HashSet<String> = HashSet::new();
             for state in &model.states {
@@ -79,7 +82,6 @@ pub fn sat(model: &Model, formula: &Formula) -> HashSet<String> {
             s.difference(&exists_future(model, &Formula::Not(form.clone())))
                 .cloned().collect()
         }
-        _ => todo!()
     }
 }
 
