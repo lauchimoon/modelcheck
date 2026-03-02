@@ -1,0 +1,14 @@
+let S {p0, p1, p2, p3, p4};
+let I {p0};
+
+label p0 {a};
+label p1 {a, b};
+label p2 {c};
+label p3 {b, c};
+label p4 {a};
+
+transition p0 {p1};
+transition p1 {p3, p4};
+transition p2 {p2};
+transition p3 {p2};
+transition p4 {p3, p4};
