@@ -1,6 +1,6 @@
-use crate::model::parser;
-use crate::model::ctlmodel::Model;
-use crate::model::ctlmodel::CTLState;
+use crate::ctl::parser;
+use crate::ctl::model::Model;
+use crate::ctl::state::State;
 
 pub struct Interpreter {
     stmts: Vec<parser::Statement>,
@@ -28,7 +28,7 @@ impl Interpreter {
                     self.model.init_states = stmt.set.clone();
                 }
             } else if stmt.keyword == "label" {
-                let state = CTLState {
+                let state = State {
                     labels: stmt.set.clone(),
                     transitions: Vec::new(),
                 };

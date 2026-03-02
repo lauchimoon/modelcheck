@@ -1,9 +1,9 @@
-mod model;
+mod ctl;
 mod prop;
 mod sat;
 mod util;
 
-use crate::model::ctlmodel::Model;
+use crate::ctl::model::Model;
 use crate::util::set::print_set;
 
 use std::env;

@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 use crate::prop::formula::Formula;
-use crate::model::ctlmodel::Model;
+use crate::ctl::model::Model;
 
 // Sat(False)      = empty
 // Sat(p)          = {s \in model.states s.t. p \in model.state_info[s].labels)}

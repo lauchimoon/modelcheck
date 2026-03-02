@@ -1,6 +1,7 @@
-use crate::model::lexer::Lexer;
-use crate::model::parser::Parser;
-use crate::model::interpreter::Interpreter;
+use crate::ctl::lexer::Lexer;
+use crate::ctl::parser::Parser;
+use crate::ctl::interpreter::Interpreter;
+use crate::ctl::state::State;
 use crate::sat::sat::sat;
 
 use crate::prop::lexer::Lexer as PropLexer;
@@ -13,17 +14,11 @@ use std::fs;
 use std::collections::HashMap;
 use std::collections::HashSet;
 
-#[derive(Default, Eq, Hash, PartialEq, Debug, Clone)]
-pub struct CTLState {
-    pub labels: Vec<String>,
-    pub transitions: Vec<String>,
-}
-
 #[derive(Clone)]
 pub struct Model {
     pub states: Vec<String>,
     pub init_states: Vec<String>,
-    pub state_info: HashMap<String, CTLState>,
+    pub state_info: HashMap<String, State>,
 }
 
 impl Model {
