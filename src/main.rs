@@ -10,13 +10,27 @@ use std::env;
 use std::path::Path;
 use std::ffi::OsStr;
 
-fn main() {
-    let (model_path, formula_string) = parse_args();
-    let model = Model::from_file(model_path);
-    let formula = Formula::from_string(formula_string);
+use clap::Parser;
 
-    let verbose = true;
-    if verbose {
+#[derive(Parser, Debug)]
+struct Args {
+    /// Path to a model file
+    model_path: String,
+
+    /// Formula to test the model on
+    formula: String,
+
+    /// Display information about the model
+    #[arg(short, long, action = clap::ArgAction::SetTrue)]
+    verbose: bool,
+}
+
+fn main() {
+    let args = Args::parse();
+    let model = Model::from_file(args.model_path);
+    let formula = Formula::from_string(args.formula);
+
+    if args.verbose {
         println!("{}", model);
     }
 
@@ -26,17 +40,4 @@ fn main() {
     } else {
         println!("M |/= {}", formula);
     }
-}
-
-fn parse_args() -> (String, String) {
-    let args: Vec<String> = env::args().collect();
-    if args.len() < 3 {
-        panic!("{}: missing .model file and proposition", args[0]);
-    }
-    let filepath = Path::new(&args[1]);
-    let ext = filepath.extension();
-    if ext != Some(OsStr::new("model")) {
-        panic!("{}: '{}' is not a .model file", args[0], filepath.display());
-    }
-    (filepath.to_str().unwrap().to_string(), args[2].clone())
 }
