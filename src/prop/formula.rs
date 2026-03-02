@@ -38,14 +38,14 @@ impl fmt::Display for Formula {
             Formula::And(form1, form2) => write!(f, "({form1} ^ {form2})"),
             Formula::Or(form1, form2) => write!(f, "({form1} v {form2})"),
             Formula::Implies(form1, form2) => write!(f, "({form1} -> {form2})"),
-            Formula::EX(formula) => write!(f, "EX{formula}"),
-            Formula::AX(formula) => write!(f, "AX{formula}"),
-            Formula::EU(form1, form2) => write!(f, "E[{form1} U {form2}]"),
-            Formula::AU(form1, form2) => write!(f, "A[{form1} U {form2}]"),
-            Formula::EF(formula) => write!(f, "EF{formula}"),
-            Formula::AF(formula) => write!(f, "AF{formula}"),
-            Formula::EG(formula) => write!(f, "EG{formula}"),
-            Formula::AG(formula) => write!(f, "AG{formula}"),
+            Formula::EX(formula) => write!(f, "(EX{formula})"),
+            Formula::AX(formula) => write!(f, "(AX{formula})"),
+            Formula::EU(form1, form2) => write!(f, "(E[{form1} U {form2}])"),
+            Formula::AU(form1, form2) => write!(f, "(A[{form1} U {form2}])"),
+            Formula::EF(formula) => write!(f, "(EF{formula})"),
+            Formula::AF(formula) => write!(f, "(AF{formula})"),
+            Formula::EG(formula) => write!(f, "(EG{formula})"),
+            Formula::AG(formula) => write!(f, "(AG{formula})"),
         }
     }
 }
