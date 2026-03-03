@@ -4,11 +4,10 @@ Robust model checker for a formula in [CTL](https://en.wikipedia.org/wiki/Comput
 In other words, given a model M and a formula phi, the program checks if M |= phi.
 
 ## Getting started
-```
-$ git clone https://github.com/lauchimoon/modelcheck
-$ cargo build
-$ ./target/debug/modelcheck <model file> <formula>
-```
+1. [Download](https://rust-lang.org/learn/get-started/) the Rust toolchain.
+2. Clone the repo: `git clone https://github.com/lauchimoon/modelcheck`
+3. Build the project in release mode: `cargo build --release`
+4. Run `./target/release/modelcheck <model file> <formula>`
 
 ### Models
 Models need states and initial states. Those states have labels and transitions.
