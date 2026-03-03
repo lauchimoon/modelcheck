@@ -1,14 +1,14 @@
-let S {p0, p1, p2, p3, p4};
-let I {p0};
+let S {s0, s1, s2, s3, s4};
+let I {s0};
 
-label p0 {a};
-label p1 {a, b};
-label p2 {c};
-label p3 {b, c};
-label p4 {a};
+label s0 {b};
+label s1 {a, b};
+label s2 {a};
+label s3 {a};
+label s4 {a, b};
 
-transition p0 {p1};
-transition p1 {p3, p4};
-transition p2 {p2};
-transition p3 {p2};
-transition p4 {p3, p4};
+transition s0 {s1, s2, s3};
+transition s1 {s0, s2, s4};
+transition s2 {s1, s2, s4};
+transition s3 {s4};
+transition s4 {s3};

@@ -1,10 +1,5 @@
-mod ctl;
-mod prop;
-mod sat;
-mod util;
-
-use crate::ctl::model::Model;
-use crate::prop::formula::Formula;
+use modelcheck::ctl::model::Model;
+use modelcheck::prop::formula::Formula;
 
 use clap::Parser;
 

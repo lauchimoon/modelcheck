@@ -1,0 +1,14 @@
+let S {s1, s2, s3, s4, s5};
+let I {s1};
+
+label s1 {r};
+label s2 {y};
+label s3 {g};
+label s4 {y, r};
+label s5 {b};
+
+transition s1 {s4};
+transition s2 {s1, s5};
+transition s3 {s2};
+transition s4 {s3};
+transition s5 {s2};
